@@ -1,5 +1,5 @@
 window.onload=function(){
-
+    listaProdutosAlertas()
 }
 
 function listaProdutosAlertas(){
@@ -18,7 +18,7 @@ function listaProdutosAlertas(){
             }
             var html='';
             for(i in res){
-                html="<td class='column0'>"+prodCat_referencia+"</td><td class='column1'>"+prodCat_referencia+"</td><td class='column2'>"+prodCat_referencia+"</td><td class='column3'>"+prodCat_referencia+"</td><td class='column4'>"+prodCat_nome+"</td><td class='column5'>"+prodCat_referencia+"</td><td class='column6'>"+prodCat_referencia+"</td>";
+                html+="<td class='column0'>"+res[i].prodCat_referencia+"</td><td class='column1'>"+res[i].prodCat_referencia+"</td><td class='column2'>"+res[i].prodCat_referencia+"</td><td class='column3'>"+res[i].prodCat_referencia+"</td><td class='column4'>"+res[i].prodCat_nome+"</td><td class='column5'>"+res[i].prodCat_referencia+"</td><td class='column6'>"+res[i].prodCat_referencia+"</td>";
             }
             produtosInfo.innerHTML=html;
         },
