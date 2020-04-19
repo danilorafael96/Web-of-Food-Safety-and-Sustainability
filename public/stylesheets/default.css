@@ -438,7 +438,7 @@
 		margin-bottom: 2em;
 		border-bottom: 1px solid rgba(0,0,0,0.08);
 		text-align: center;
-		font-size: 2.6em;
+		font-size: 2.2em;
 		color: #40493C;
 	}
 
@@ -571,4 +571,18 @@
 #mapid { 
 	height: 400px;
 	width: 1280px;
+}
+
+#alertasInfo{
+	display: inline;
+	margin-bottom: 15px;
+	margin-left: 10px;
+}
+
+#filtro{
+	margin-bottom: 10px;
+}
+
+#calculadora{
+	margin-top: 20px;
 }

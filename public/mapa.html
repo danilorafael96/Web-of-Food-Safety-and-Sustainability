@@ -41,6 +41,31 @@
     </div>
     
 <div id="page-wrapper">
+    <div id="filtro">
+        <label for="origem">Origem:</label>
+        <select id="origem" name="Origem">
+            <option value="portugal">Portugal</option>
+            <option value="angola">Angola</option>
+            <option value="japao">Japão</option>
+            <option value="brasil">Brasil</option>
+        </select>
+    
+        <label for="destino">Destino:</label>
+        <select id="destino" name="Destino">
+            <option value="portugal">Portugal</option>
+            <option value="angola">Angola</option>
+            <option value="japao">Japão</option>
+            <option value="brasil">Brasil</option>
+        </select>
+
+        <label for="tipoTransporte">Tipo de transporte:</label>
+        <select id="tipoTransporte" name="Tipo de transporte">
+            <option value="navio">Navio</option>
+            <option value="aviao">Aviao</option>
+        </select>
+        <input type="submit">
+    </div>
+    
     <div id="mapid">
         <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
         <script src="./javascripts/leaflet-routing-machine.js"></script>
