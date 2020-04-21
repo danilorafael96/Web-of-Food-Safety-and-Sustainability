@@ -3,10 +3,10 @@ window.onload=function(){
 }
 
 function listaProdutosAlertas(){
-    var produtosInfo=document.getElementsByClassName('produtosInfo');
+    var produtosInfo=document.getElementById('produtosInfo');
 
     $.ajax({
-		url: "/api/produtos+alertas",
+		url: "/api/produtosAlertas",
 		method: "get",
 		contentType: "aplication/json",
 		dataType: "json",
@@ -16,9 +16,9 @@ function listaProdutosAlertas(){
 				console.log(JSON.stringify(res));
 				return;
             }
-            var html='';
+            var html="";
             for(i in res){
-                html+="<td class='column0'>"+res[i].prodCat_referencia+"</td><td class='column1'>"+res[i].prodCat_referencia+"</td><td class='column2'>"+res[i].prodCat_referencia+"</td><td class='column3'>"+res[i].prodCat_referencia+"</td><td class='column4'>"+res[i].prodCat_nome+"</td><td class='column5'>"+res[i].prodCat_referencia+"</td><td class='column6'>"+res[i].prodCat_referencia+"</td>";
+                html+="<tr> <td class='column0'>"+res[i].prodCat_referencia+"</td><td class='column1'> </td><td class='column2'> </td><td class='column3'> </td><td class='column4'>"+res[i].prodCat_nome+"</td><td class='column5'> </td><td class='column6'> </td> </tr>";
             }
             produtosInfo.innerHTML=html;
         },
