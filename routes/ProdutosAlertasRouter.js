@@ -12,4 +12,15 @@ router.get('/',function(req,res,next){
     },next)
 })
 
+
+router.get('/infoAlertas',function(req,res,next){
+    ProdutosAlertasDAO.getProdsAlertasInfo(function(err,result){
+        if(err){
+            res.status(result.code).json(err);
+            return;
+        }
+        res.status(result.code).send(result.data);
+    },next)
+})
+
 module.exports=router;

@@ -291,7 +291,7 @@
 	#header-wrapper
 	{
 		overflow: hidden;
-		background: url(images/pic01.jpg) no-repeat center;
+		/*background: url() no-repeat center;*/
 		background-size: 100% auto;
 	}
 

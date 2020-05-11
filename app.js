@@ -8,7 +8,8 @@ var app = express();
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-var ProdutosAlertasRouter=require('./routes/ProdutosAlertasRouter')
+var ProdutosAlertasRouter=require('./routes/ProdutosAlertasRouter');
+var MapaRouter=require('./routes/MapaRouter');
 
 app.use(function(req,res,next){
   req.con=con;
@@ -27,7 +28,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-app.use('/api/produtosAlertas',ProdutosAlertasRouter);
+app.use('/api/produtos',ProdutosAlertasRouter);
+app.use('/api/mapaInfo',MapaRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
