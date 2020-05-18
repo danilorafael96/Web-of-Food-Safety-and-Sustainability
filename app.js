@@ -10,6 +10,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var ProdutosAlertasRouter=require('./routes/ProdutosAlertasRouter');
 var MapaRouter=require('./routes/MapaRouter');
+var CalculadoraRouter=require('./routes/CalculadoraRouter');
 
 app.use(function(req,res,next){
   req.con=con;
@@ -30,6 +31,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/api/produtos',ProdutosAlertasRouter);
 app.use('/api/mapaInfo',MapaRouter);
+app.use('/api/calculadora',CalculadoraRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

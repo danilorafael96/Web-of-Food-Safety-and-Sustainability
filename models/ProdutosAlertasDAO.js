@@ -6,7 +6,7 @@ module.exports.getProdsInfo=function(callback,next){
             callback(err, { code: 500, status: "Erro na conexão da base de dados" })
         }
 
-        conn.query("select * from CategoriasProdutos,ProdutosAlimentares where prod_prodCat_id = prodCat_id and prod_alerta_id is NULL",function(err,results){
+        conn.query("select prod_referencia, prod_nome, categ_nome, local_cidadeOrigem, local_cidadeDestino, prod_dataProducao, prodTransp_quantidade  from CategoriaProdutos, ProdutosAlimentares, Transportes, ProdutosTransportes, Locais, LocaisParagens where prod_categ_id = categ_id and prodTransp_prod_id=prod_id and prodTransp_transp_id=transp_id and local_prod_id=prod_id and localParagem_local_id=local_id and localParagem_transp_id=transp_id and transp_alerta_id is NULL UNION select prod_referencia, prod_nome, categ_nome, local_cidadeOrigem, local_cidadeDestino, prod_dataProducao, prodTransp_quantidade from CategoriaProdutos, ProdutosAlimentares, Transportes, ProdutosTransportes, Locais, LocaisParagens where prod_categ_id = categ_id and prodTransp_prod_id=prod_id and prodTransp_transp_id=transp_id and local_prod_id=prod_id and localParagem_local_id=local_id and localParagem_transp_id=transp_id and transp_alerta_id is NOT NULL",function(err,results){
             conn.release();
             if(err){
                 callback(err, { code: 500, status: "Erro na conexão da base de dados" })
@@ -24,7 +24,7 @@ module.exports.getProdsAlertasInfo=function(callback,next){
             callback(err, { code: 500, status: "Erro na conexão da base de dados" })
         }
 
-        conn.query("select * from Alertas,EntidadesAlertas,EstadosClassifAlertas,CategoriasProdutos,ProdutosAlimentares,TiposAlertas where alerta_estadoClassif_id=estadoClassif_id and alerta_ent_id=ent_id and alerta_tipoAlerta_id=tipoAlerta_id and prod_prodCat_id = prodCat_id and prod_alerta_id is NOT NULL",function(err,results){
+        conn.query("select DISTINCT prod_referencia, prod_nome, local_cidadeOrigem, local_cidadeDestino, alerta_info, alerta_data, entidade_nome  from CategoriaProdutos, ProdutosAlimentares, Transportes, ProdutosTransportes, Locais, LocaisParagens, Alertas, EntidadesAlertas where prod_categ_id = categ_id and prodTransp_prod_id=prod_id and prodTransp_transp_id=transp_id and local_prod_id=prod_id and localParagem_local_id=local_id and localParagem_transp_id=transp_id and transp_alerta_id=alerta_id and alerta_entidade_id=entidade_id",function(err,results){
             conn.release();
             if(err){
                 callback(err, { code: 500, status: "Erro na conexão da base de dados" })
