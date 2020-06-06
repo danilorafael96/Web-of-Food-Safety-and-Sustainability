@@ -1,5 +1,11 @@
+
+var categoriasAlimentos;
+var submete;
+var cat;
+
 window.onload=function(){
-    listaProdutosAlertas()
+	listaProdutosAlertas();
+	infoCategorias();
 }
 
 function listaProdutosAlertas(){
@@ -54,17 +60,17 @@ function verifAlertas(){
 				var novo3="<th class='column4'>Data do alerta</th>";
 				var novo4="<th class='column5'>Informação</th>";
 				var novo5="<th class='column6'>Entidade reguladora</th>";
-
-				var html="";
-				for(i in res){
-					html+="<tr> <td class='column0'>"+res[i].prod_referencia+"</td><td class='column1'>"+res[i].prod_nome+" </td><td class='column2'>"+res[i].local_cidadeOrigem+" </td><td class='column3'>"+res[i].local_cidadeDestino+" </td><td class='column4'>"+res[i].alerta_data+"</td><td class='column5'>"+res[i].alerta_info+" </td><td class='column6'>"+res[i].entidade_nome+" </td> </tr>";
-				}
+				
 				inicio.innerHTML=novo1;
 				fim.innerHTML=novo2;
 				dataAlerta.innerHTML=novo3;
 				alertaInfo.innerHTML=novo4;
 				entidade.innerHTML=novo5;
-
+				
+				var html="";
+				for(i in res){
+					html+="<tr> <td class='column0'>"+res[i].prod_referencia+"</td><td class='column1'>"+res[i].prod_nome+" </td><td class='column2'>"+res[i].local_cidadeOrigem+" </td><td class='column3'>"+res[i].local_cidadeDestino+" </td><td class='column4'>"+res[i].alerta_data+"</td><td class='column5'>"+res[i].alerta_info+" </td><td class='column6'>"+res[i].entidade_nome+" </td> </tr>";
+				}
 				produtosInfo.innerHTML=html;
 			}else{
 				novo1="<th class='column2'>Categoria</th>";
@@ -86,3 +92,66 @@ function verifAlertas(){
 		}
 	})
 }
+
+function infoCategorias(){
+	categoriasAlimentos = document.getElementById('categoriasAlimentos');
+	submete=document.getElementById('submete');
+	
+	$.ajax({
+		url: "/api/produtos/categorias",
+		method: "get",
+		contentType: "aplication/json",
+		dataType: "json",
+		success: function (res, status, jqXHR) {
+			console.log(status);
+			if (res.err) {
+				console.log(JSON.stringify(res));
+				return;
+			}
+
+			var html="";
+			var html1="";
+			for(i in res){
+				html+="<option value="+res[i].categ_id+">"+res[i].categ_nome+"</option>";
+				html1="<input type='submit' onclick='recebeCategoria()'></input>";
+			}
+			categoriasAlimentos.innerHTML=html;
+			submete.innerHTML=html1;
+
+		},
+		error: function (jqXHR, errStr, errThrown) {
+			console.log(errStr);
+		}
+	})
+}
+
+function recebeCategoria(){
+	cat=document.getElementById('categoriasAlimentos').value;
+	var produtosInfo=document.getElementById('produtosInfo');
+
+	$.ajax({
+		url: "/api/produtos",
+		method: "get",
+		contentType: "aplication/json",
+		dataType: "json",
+		success: function (res, status, jqXHR) {
+			console.log(status);
+			if (res.err) {
+				console.log(JSON.stringify(res));
+				return;
+			}
+
+			var html="";
+			for(i in res){
+				if(cat==res[i].categ_id){
+					html+="<tr> <td class='column0'>"+res[i].prod_referencia+"</td><td class='column1'>"+res[i].prod_nome+" </td><td class='column2'>"+res[i].categ_nome+" </td><td class='column3'>"+res[i].local_cidadeOrigem+" </td><td class='column4'>"+res[i].local_cidadeDestino+"</td><td class='column5'>"+res[i].prod_dataProducao+" </td><td class='column6'>"+res[i].prodTransp_quantidade+" </td> </tr>";
+				}
+			}
+			produtosInfo.innerHTML=html;
+		},
+		error: function (jqXHR, errStr, errThrown) {
+			console.log(errStr);
+		}
+	})
+}
+

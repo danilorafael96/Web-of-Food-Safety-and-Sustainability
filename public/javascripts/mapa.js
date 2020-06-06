@@ -1,6 +1,8 @@
 console.log("Start");
 
 var mymap = L.map('mapid');
+var produtoNome = document.getElementById('produtoNome');
+var pn;
 var origem = document.getElementById('origem');
 var o;
 var destino = document.getElementById('destino');
@@ -31,6 +33,7 @@ function filtros() {
         contentType: "application/json",
         dataType: "json",
         success: function (res, status) {
+            var html0;
             var html1;
             var html2;
             var html3;
@@ -50,12 +53,14 @@ function filtros() {
                 cidadeCoord.push(a,b);
                 trajetos.push(res[i]);
 
+                html0+="<option value="+res[i].prod_nome+">"+res[i].prod_nome+"</option>";
                 html1+="<option value="+res[i].local_cidadeOrigem+">"+res[i].local_cidadeOrigem+"</option>";
                 html2+="<option value="+res[i].local_cidadeDestino+">"+res[i].local_cidadeDestino+"</option>";
                 html3+="<option value="+res[i].prod_dataProducao+">"+res[i].prod_dataProducao+"</option>";
-                html4="<input type='submit' onclick='recebeFiltro()'>"
+                html4="<input type='submit' onclick='recebeFiltro()'></input>"
             }
 
+            produtoNome.innerHTML=html0;
             origem.innerHTML=html1;
             destino.innerHTML=html2;
             dataProducao.innerHTML=html3;
@@ -76,9 +81,9 @@ function getCidadesCoord(cidade){
     }
 }
 
-function checkTrajetos(origem,destino){
+function checkTrajetos(produtoNome,origem,destino,dataProducao){
     for(i in trajetos){
-        if (origem==trajetos[i].local_cidadeOrigem && destino==trajetos[i].local_cidadeDestino){
+        if (produtoNome==trajetos[i].prod_nome && origem==trajetos[i].local_cidadeOrigem && destino==trajetos[i].local_cidadeDestino && dataProducao==trajetos[i].prod_dataProducao){
             return true;
         }
     }
@@ -88,16 +93,13 @@ function checkTrajetos(origem,destino){
 function recebeFiltro(){
     console.log(cidadeCoord);
 
-    mymap.invalidateSize();
+    pn=document.getElementById('produtoNome').value;
 
     o=document.getElementById('origem').value;
-    document.getElementById('teste1').innerHTML=o;
 
     d=document.getElementById('destino').value;
-    document.getElementById('teste2').innerHTML=d;
 
     dp=document.getElementById('dataProducao').value;
-    document.getElementById('teste3').innerHTML=dp;
 
     $.ajax({
         url: "/api/mapaInfo/",
@@ -114,13 +116,32 @@ function recebeFiltro(){
             var cidDestino=getCidadesCoord(d);
             var paragem_nome=[];
 
+            var distancia_km;
+            var distancia_total;
             for (i in res){
-                if (o==res[i].local_cidadeOrigem && d==res[i].local_cidadeDestino && dp==res[i].prod_dataProducao){
+                if (pn==res[i].prod_nome && o==res[i].local_cidadeOrigem && d==res[i].local_cidadeDestino && dp==res[i].prod_dataProducao){
                     pontosTrajeto.push([res[i].localParagem_cidadeLat,res[i].localParagem_cidadeLong]);
                     paragem_nome.push(res[i].localParagem_cidade);
+
+                    // if (pontosTrajeto.length==0){
+                    //     var distancia = mymap.distance(cidOrigem,cidDestino);
+                    //     distancia_km=Math.round(distancia/1000);
+                        
+                    // } else if (pontosTrajeto.length!=0) {
+                    //     distancia_total=mymap.distance(cidOrigem,pontosTrajeto[0]);
+                    //     for(i in pontosTrajeto){
+                    //         if(pontosTrajeto[i+1]!=null)
+                    //         distancia_total += map.distance(pontosTrajeto[i],(pontosTrajeto[i+1]));
+                    //     }
+                    //     distancia_total+= mymap.distance(pontosTrajeto[pontosTrajeto.length-1],cidDestino);
+                    //     distancia_total= Math.round(distancia_total/1000);   
+                    // }
                 }
             }
-            if(!checkTrajetos(o,d)){
+            // console.log(distancia_km);
+            // console.log(distancia_total);
+            
+            if(!checkTrajetos(pn,o,d,dp)){
                 return;
             }
             
@@ -158,9 +179,21 @@ function recebeFiltro(){
             mymap.fitBounds(polyline.getBounds());
             console.log(mymap);
 
-            console.log(cidOrigem.distanceTo(cidDestino));
-
-
+            //Cálculo da distância do trajeto(com ou sem paragens) em metros e conversão em km. Utilizado para determinar a distância que é adicionada à base de dados manualmente.
+            if (pontosTrajeto.length==0){
+                var distancia = mymap.distance(cidOrigem,cidDestino);
+                distancia_km=Math.round(distancia/1000);
+                console.log(distancia_km);
+            } else if (pontosTrajeto.length!=0) {
+                distancia_total=mymap.distance(cidOrigem,pontosTrajeto[0]);
+                for(i in pontosTrajeto){
+                    if(pontosTrajeto[i+1]!=null)
+                    distancia_total += map.distance(pontosTrajeto[i],(pontosTrajeto[i+1]));
+                }
+                distancia_total+= mymap.distance(pontosTrajeto[pontosTrajeto.length-1],cidDestino);
+                distancia_total= Math.round(distancia_total/1000);
+                console.log(distancia_total);
+            }
         },
         error: function (jqXHR, errStr, errThrown) {
 			console.log(errStr);
