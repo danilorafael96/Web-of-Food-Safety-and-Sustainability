@@ -291,6 +291,13 @@
 	#header-wrapper
 	{
 		overflow: hidden;
+		/* background: url("../images/earth.png") no-repeat center; */
+		/* background-size: 100% auto; */
+	}
+
+	#header-wrapperI
+	{
+		overflow: hidden;
 		background: url("../images/earth.png") no-repeat center;
 		/* background-size: 100% auto; */
 	}
@@ -384,7 +391,7 @@
 		border-top: 1px solid rgba(0,0,0,0.08);
 		border-bottom: 1px solid rgba(0,0,0,0.08);
 		text-align: center;
-		color: rgba(255,255,255,0.5);
+		color: rgba(255, 255, 255);
 	}
 
 	#banner a
