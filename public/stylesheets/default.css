@@ -291,15 +291,15 @@
 	#header-wrapper
 	{
 		overflow: hidden;
-		/*background: url() no-repeat center;*/
-		background-size: 100% auto;
+		background: url("../images/earth.png") no-repeat center;
+		/* background-size: 100% auto; */
 	}
 
 	#header
 	{
 		overflow: hidden;
-		position: relative;
-		padding: 5em 0em;
+		/* position: relative;*/
+		padding: 5em 0em; 
 	}
 
 /*********************************************************************************/
