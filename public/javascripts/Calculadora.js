@@ -87,7 +87,7 @@ function resultadoCalc(){
                     console.log(res[i].local_distTrajetoKm);
                     formula=res[i].tipoTransp_pegadaEcoKm/res[i].local_distTrajetoKm;
                     console.log(formula);
-                    pegada="O resultado dos valores introduzidos indica que, de "+res[i].local_cidadeOrigem+" para "+res[i].local_cidadeDestino+", é percorrida uma disntância de "+res[i].local_distTrajetoKm+" km. Logo, a pegada de carbono é igual a "+formula.toFixed(3)+" mg/L.";
+                    pegada="O resultado dos valores introduzidos indica que, de "+res[i].local_cidadeOrigem+" para "+res[i].local_cidadeDestino+", é percorrida uma distância de "+res[i].local_distTrajetoKm+" km. Logo, a pegada de carbono é igual a "+formula.toFixed(3)+" mg/L.";
                     calculo.innerHTML=pegada;
                 }
             }

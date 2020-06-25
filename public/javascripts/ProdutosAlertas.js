@@ -111,8 +111,9 @@ function infoCategorias(){
 
 			var html="";
 			var html1="";
+			html="<option value=''> - </option>";
 			for(i in res){
-				html+="<option value="+res[i].categ_id+">"+res[i].categ_nome+"</option>";
+				html+="<option value="+res[i].categ_nome+">"+res[i].categ_nome+"</option>";
 				html1="<input type='submit' onclick='recebeCategoria()'></input>";
 			}
 			categoriasAlimentos.innerHTML=html;
@@ -143,7 +144,7 @@ function recebeCategoria(){
 
 			var html="";
 			for(i in res){
-				if(cat==res[i].categ_id){
+				if(res[i].categ_nome.includes(cat)){
 					html+="<tr> <td class='column0'>"+res[i].prod_referencia+"</td><td class='column1'>"+res[i].prod_nome+" </td><td class='column2'>"+res[i].categ_nome+" </td><td class='column3'>"+res[i].local_cidadeOrigem+" </td><td class='column4'>"+res[i].local_cidadeDestino+"</td><td class='column5'>"+res[i].prod_dataProducao+" </td><td class='column6'>"+res[i].prodTransp_quantidade+" </td> </tr>";
 				}
 			}

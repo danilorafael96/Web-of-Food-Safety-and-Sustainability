@@ -1,6 +1,6 @@
 console.log("Start");
 
-var mymap = L.map('mapid');
+var mymap = L.map('mapid').setView([40,-8],8);
 var produtoNome = document.getElementById('produtoNome');
 var pn;
 var origem = document.getElementById('origem');
@@ -12,6 +12,15 @@ var dp;
 var submete=document.getElementById('submete');
 var cidadeCoord=[];
 var trajetos=[];
+
+var polyline;
+var marker1;
+var marker2;
+var marker3;
+var markers;
+var markersMap;
+
+var limpaMapa=document.getElementById('refreshButton');
 
 window.onload = function () {
 
@@ -93,14 +102,13 @@ function checkTrajetos(produtoNome,origem,destino,dataProducao){
 function recebeFiltro(){
     console.log(cidadeCoord);
 
+    var cidOrigem;
+
     pn=document.getElementById('produtoNome').value;
-
     o=document.getElementById('origem').value;
-
     d=document.getElementById('destino').value;
-
     dp=document.getElementById('dataProducao').value;
-
+    
     $.ajax({
         url: "/api/mapaInfo/",
         method: 'get',
@@ -112,7 +120,7 @@ function recebeFiltro(){
             // console.log(dp);
 
             var pontosTrajeto=[];
-            var cidOrigem=getCidadesCoord(o);
+            cidOrigem=getCidadesCoord(o);
             var cidDestino=getCidadesCoord(d);
             var paragem_nome=[];
 
@@ -122,46 +130,35 @@ function recebeFiltro(){
                 if (pn==res[i].prod_nome && o==res[i].local_cidadeOrigem && d==res[i].local_cidadeDestino && dp==res[i].prod_dataProducao){
                     pontosTrajeto.push([res[i].localParagem_cidadeLat,res[i].localParagem_cidadeLong]);
                     paragem_nome.push(res[i].localParagem_cidade);
-
-                    // if (pontosTrajeto.length==0){
-                    //     var distancia = mymap.distance(cidOrigem,cidDestino);
-                    //     distancia_km=Math.round(distancia/1000);
-                        
-                    // } else if (pontosTrajeto.length!=0) {
-                    //     distancia_total=mymap.distance(cidOrigem,pontosTrajeto[0]);
-                    //     for(i in pontosTrajeto){
-                    //         if(pontosTrajeto[i+1]!=null)
-                    //         distancia_total += map.distance(pontosTrajeto[i],(pontosTrajeto[i+1]));
-                    //     }
-                    //     distancia_total+= mymap.distance(pontosTrajeto[pontosTrajeto.length-1],cidDestino);
-                    //     distancia_total= Math.round(distancia_total/1000);   
-                    // }
                 }
             }
-            // console.log(distancia_km);
-            // console.log(distancia_total);
             
             if(!checkTrajetos(pn,o,d,dp)){
                 return;
             }
             
             var trajeto=[];
+            markers=[];
             trajeto.push(cidOrigem);
 
-            marker1=L.marker(cidOrigem);
-            marker1.addTo(mymap).bindPopup("<p>Origem:"+o+"</p>").openPopup();
-
+            marker1=L.marker(cidOrigem).bindPopup("<p>Origem:"+o+"</p>").openPopup();
+            //marker1.addTo(mymap);
+            markers.push(marker1)
             for (i in pontosTrajeto){
                 trajeto.push(pontosTrajeto[i]);
-                marker2=L.marker(pontosTrajeto[i]);
-                marker2.addTo(mymap).bindPopup("<p>Paragem:"+paragem_nome[i]+"</p>").openPopup();
+                marker2=L.marker(pontosTrajeto[i]).bindPopup("<p>Paragem:"+paragem_nome[i]+"</p>").openPopup();
+                //marker2.addTo(mymap);
+                markers.push(marker2);
             }
 
             trajeto.push(cidDestino);
-            
-            marker3=L.marker(cidDestino);
-            marker3.addTo(mymap).bindPopup("<p>Destino:"+d+"</p>").openPopup();
-            
+
+            marker3=L.marker(cidDestino).bindPopup("<p>Destino:"+d+"</p>").openPopup();
+            //marker3.addTo(mymap);
+            markers.push(marker3);
+
+            markersMap=L.layerGroup(markers).addTo(mymap);
+
             // console.log(cidOrigem);
             // console.log(pontosTrajeto);
             // console.log(cidDestino);
@@ -174,7 +171,7 @@ function recebeFiltro(){
             cor= "rgb("+r+" ,"+g+","+ b+")";
             
             var options={color: cor};
-            var polyline = L.polyline(trajeto,options ).addTo(mymap);
+            polyline = L.polyline(trajeto,options ).addTo(mymap);
             // zoom the map to the polyline
             mymap.fitBounds(polyline.getBounds());
             console.log(mymap);
@@ -197,6 +194,13 @@ function recebeFiltro(){
         },
         error: function (jqXHR, errStr, errThrown) {
 			console.log(errStr);
-		}
+        }
     })
+}
+
+function limparMapa(){
+    for (i in markers){
+        mymap.removeLayer(markers[i]);
+    }
+    mymap.removeLayer(polyline);
 }
